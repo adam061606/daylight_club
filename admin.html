@@ -1,0 +1,115 @@
+
+  <!-- ADMIN PAGE -->
+  <div class="page" id="page-admin">
+    <div class="admin-grid">
+
+      <!-- ADD POINTS -->
+      <div>
+        <div class="card">
+          <div class="card-title">➕ Add Points</div>
+
+          <div class="form-group">
+            <label>Customer</label>
+            <select id="selectCustomer">
+              <option value="">— Select customer —</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Card Rarities Pulled <span style="color:var(--muted);font-weight:400">(select one or more)</span></label>
+            <div class="rarity-grid" id="rarityGrid">
+              <button class="rarity-btn" data-rarity="EX" data-pts="1" onclick="toggleRarity(this)">
+                <div class="rarity-name">EX</div>
+                <div class="rarity-pts">1 pt</div>
+              </button>
+              <button class="rarity-btn" data-rarity="AR/SR" data-pts="2" onclick="toggleRarity(this)">
+                <div class="rarity-name">AR/SR</div>
+                <div class="rarity-pts">2 pts</div>
+              </button>
+              <button class="rarity-btn" data-rarity="IR/FA" data-pts="3" onclick="toggleRarity(this)">
+                <div class="rarity-name">IR/FA</div>
+                <div class="rarity-pts">3 pts</div>
+              </button>
+              <button class="rarity-btn" data-rarity="MA" data-pts="5" onclick="toggleRarity(this)">
+                <div class="rarity-name">MA</div>
+                <div class="rarity-pts">5 pts</div>
+              </button>
+              <button class="rarity-btn" data-rarity="SAR/SIR" data-pts="10" onclick="toggleRarity(this)">
+                <div class="rarity-name">SAR/SIR</div>
+                <div class="rarity-pts">10 pts</div>
+              </button>
+              <button class="rarity-btn" data-rarity="MUR/BWR" data-pts="20" onclick="toggleRarity(this)">
+                <div class="rarity-name">MUR/BWR</div>
+                <div class="rarity-pts">20 pts</div>
+              </button>
+            </div>
+            <div class="selected-rarities" id="selectedRarities"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Remarks <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+            <textarea id="remarksInput" placeholder="e.g. pulled during Mystery Box opening, pack #3…"></textarea>
+          </div>
+
+          <div class="preview-box">
+            <div>
+              <div class="preview-label">Total Points to Add</div>
+              <div id="previewPts" class="preview-val">—</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="preview-label">Cards Selected</div>
+              <div id="previewRarity" style="font-size:13px;color:var(--muted);margin-top:4px;">None</div>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="addPoints()">Add Points</button>
+        </div>
+
+        <!-- REDEEM VOUCHER -->
+        <div class="card redeem-section" style="margin-top:16px;">
+          <div class="card-title">🎟 Redeem Voucher</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:16px;font-family:'Space Mono',monospace;">10 pts = $1 voucher</p>
+          <div class="redeem-row">
+            <div class="form-group">
+              <label>Customer</label>
+              <select id="redeemCustomer">
+                <option value="">— Select —</option>
+              </select>
+            </div>
+            <div class="form-group" style="min-width:90px;">
+              <label>Vouchers</label>
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeRedeemQty(-1)">−</button>
+                <input class="qty-val" id="redeemQty" type="number" value="1" min="1">
+                <button class="qty-btn" onclick="changeRedeemQty(1)">+</button>
+              </div>
+            </div>
+            <button class="btn-sm" onclick="redeemVoucher()" style="margin-bottom:1px;white-space:nowrap;">Redeem $<span id="redeemAmt">1</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div>
+        <!-- ADD CUSTOMER -->
+        <div class="card">
+          <div class="card-title">👤 Customers</div>
+          <div class="form-group" style="display:flex;gap:8px;margin-bottom:16px;">
+            <input id="newCustomerName" type="text" placeholder="Customer name..." style="flex:1;margin:0;" onkeydown="if(event.key==='Enter')addCustomer()">
+            <button class="btn-sm" onclick="addCustomer()">Add</button>
+          </div>
+          <div class="cust-list" id="custList">
+            <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">No customers yet</div>
+          </div>
+        </div>
+
+        <!-- HISTORY LOG -->
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">📋 Recent Activity</div>
+          <div class="history-list" id="historyList">
+            <div style="text-align:center;padding:16px;color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;">No activity yet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
