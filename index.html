@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daylight Club — Midnight Collectibles</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loading-spinner"></div>
+  <p>Loading rankings…</p>
+</div>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <h1>DAYLIGHT CLUB</h1>
+      <p>by midnight collectibles</p>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="total-stat">
+        <div>Total Members</div>
+        <span id="totalCustomers">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="leaderboard" onclick="switchTab('leaderboard', this)">🏆 Leaderboard</button>
+    <button class="tab" data-tab="admin" onclick="switchTab('admin', this)">⚙️ Admin</button>
+  </div>
+
+  <!-- LEADERBOARD PAGE -->
+  <div class="page active" id="page-leaderboard">
+    <div class="lb-header">
+      <div class="lb-title">RANKINGS</div>
+    </div>
+
+    <div class="lb-table-wrap" id="lbTableWrap">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th class="td-rank">#</th>
+            <th>Customer</th>
+            <th>Points</th>
+            <th>Voucher</th>
+          </tr>
+        </thead>
+        <tbody id="lbList"></tbody>
+      </table>
+      <button class="lb-show-more" id="lbShowMore" onclick="toggleShowAll()" style="display:none;"></button>
+    </div>
+
+    <!-- POINTS RULES -->
+    <div class="rules-section">
+      <div class="rules-title">🎴 Points System</div>
+      <div class="rules-grid">
+        <div class="rule-card rc-ex">
+          <div class="rule-rarity">EX</div>
+          <div class="rule-pts-wrap"><div class="rule-pts">1</div><div class="rule-pts-label">point</div></div>
+        </div>
+        <div class="rule-card rc-arsr">
+          <div class="rule-rarity">AR / SR</div>
+          <div class="rule-pts-wrap"><div class="rule-pts">2</div><div class="rule-pts-label">points</div></div>
+        </div>
+        <div class="rule-card rc-irfa">
+          <div class="rule-rarity">IR / FA</div>
+          <div class="rule-pts-wrap"><div class="rule-pts">3</div><div class="rule-pts-label">points</div></div>
+        </div>
+        <div class="rule-card rc-ma">
+          <div class="rule-rarity">MA</div>
+          <div class="rule-pts-wrap"><div class="rule-pts">5</div><div class="rule-pts-label">points</div></div>
+        </div>
+        <div class="rule-card rc-sarsr">
+          <div class="rule-rarity">SAR / SIR</div>
+          <div class="rule-pts-wrap"><div class="rule-pts">10</div><div class="rule-pts-label">points</div></div>
+        </div>
+        <div class="rule-card rc-mur">
+          <div class="rule-rarity">MUR / BWR</div>
+          <div class="rule-pts-wrap"><div class="rule-pts">20</div><div class="rule-pts-label">points</div></div>
+        </div>
+      </div>
+      <div class="voucher-rule">
+        <div class="vr-icon">🎟️</div>
+        <div class="vr-text">Every <span>10 points</span> earned can be redeemed for a <span>$1 voucher</span> — points carry over after redemption.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PAGE (password-gated, rendered inline for SPA feel) -->
+  <div class="page" id="page-admin">
+    <div class="admin-grid">
+
+      <!-- LEFT: ADD POINTS + REDEEM -->
+      <div>
+        <div class="card">
+          <div class="card-title">➕ Add Points</div>
+
+          <div class="form-group">
+            <label>Customer</label>
+            <select id="selectCustomer">
+              <option value="">— Select customer —</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Card Rarities Pulled <span style="color:var(--muted);font-weight:400">(select one or more)</span></label>
+            <div class="rarity-grid" id="rarityGrid">
+              <button class="rarity-btn" data-rarity="EX" data-pts="1" onclick="toggleRarity(this)">
+                <div class="rarity-name">EX</div><div class="rarity-pts">1 pt</div>
+              </button>
+              <button class="rarity-btn" data-rarity="AR/SR" data-pts="2" onclick="toggleRarity(this)">
+                <div class="rarity-name">AR/SR</div><div class="rarity-pts">2 pts</div>
+              </button>
+              <button class="rarity-btn" data-rarity="IR/FA" data-pts="3" onclick="toggleRarity(this)">
+                <div class="rarity-name">IR/FA</div><div class="rarity-pts">3 pts</div>
+              </button>
+              <button class="rarity-btn" data-rarity="MA" data-pts="5" onclick="toggleRarity(this)">
+                <div class="rarity-name">MA</div><div class="rarity-pts">5 pts</div>
+              </button>
+              <button class="rarity-btn" data-rarity="SAR/SIR" data-pts="10" onclick="toggleRarity(this)">
+                <div class="rarity-name">SAR/SIR</div><div class="rarity-pts">10 pts</div>
+              </button>
+              <button class="rarity-btn" data-rarity="MUR/BWR" data-pts="20" onclick="toggleRarity(this)">
+                <div class="rarity-name">MUR/BWR</div><div class="rarity-pts">20 pts</div>
+              </button>
+            </div>
+            <div class="selected-rarities" id="selectedRarities"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Remarks <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+            <textarea id="remarksInput" placeholder="e.g. Mystery Box opening, pack #3…"></textarea>
+          </div>
+
+          <div class="preview-box">
+            <div>
+              <div class="preview-label">Total Points to Add</div>
+              <div id="previewPts" class="preview-val">—</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="preview-label">Cards Selected</div>
+              <div id="previewRarity" style="font-size:13px;color:var(--muted);margin-top:4px;">None</div>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="addPoints()">Add Points</button>
+        </div>
+
+        <!-- REDEEM VOUCHER -->
+        <div class="card redeem-section" style="margin-top:16px;">
+          <div class="card-title">🎟 Redeem Voucher</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:16px;font-family:'Space Mono',monospace;">10 pts = $1 voucher</p>
+          <div class="redeem-row">
+            <div class="form-group">
+              <label>Customer</label>
+              <select id="redeemCustomer"><option value="">— Select —</option></select>
+            </div>
+            <div class="form-group" style="min-width:90px;">
+              <label>Vouchers</label>
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeRedeemQty(-1)">−</button>
+                <input class="qty-val" id="redeemQty" type="number" value="1" min="1">
+                <button class="qty-btn" onclick="changeRedeemQty(1)">+</button>
+              </div>
+            </div>
+            <button class="btn-sm" onclick="redeemVoucher()" style="margin-bottom:1px;white-space:nowrap;">
+              Redeem $<span id="redeemAmt">1</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: CUSTOMERS + HISTORY -->
+      <div>
+        <div class="card">
+          <div class="card-title">👤 Customers</div>
+          <div class="form-group" style="display:flex;gap:8px;margin-bottom:16px;">
+            <input id="newCustomerName" type="text" placeholder="Customer name…" style="flex:1;margin:0;"
+              onkeydown="if(event.key==='Enter')addCustomer()">
+            <button class="btn-sm" onclick="addCustomer()">Add</button>
+          </div>
+          <div class="cust-list" id="custList">
+            <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">No customers yet</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">📋 Recent Activity</div>
+          <div class="history-list" id="historyList">
+            <div style="text-align:center;padding:16px;color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;">No activity yet</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="follow-label">FOLLOW US</div>
+    <div class="social-links">
+      <a href="https://t.me/midnightcollectibles" target="_blank" rel="noopener" class="social-link tg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.667l-2.95-.924c-.64-.203-.653-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.892z" fill="#29b6f6"/></svg>
+        @midnightcollectibles
+      </a>
+      <a href="https://www.tiktok.com/@midnightcollectibles" target="_blank" rel="noopener" class="social-link tt">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.3 6.3 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.19 8.19 0 004.79 1.53V6.78a4.85 4.85 0 01-1.02-.09z" fill="#ff0050"/></svg>
+        @midnightcollectibles
+      </a>
+      <a href="https://www.instagram.com/midnightcollectiblessg" target="_blank" rel="noopener" class="social-link ig">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill="#e1306c"/></svg>
+        @midnightcollectiblessg
+      </a>
+    </div>
+    <div class="copyright">© Midnight Collectibles SG</div>
+  </footer>
+</div>
+
+<!-- Password Overlay -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div class="pw-icon">🔐</div>
+    <div class="pw-title">Admin Access</div>
+    <div class="pw-sub">Enter password to continue</div>
+    <div class="pw-input-wrap">
+      <input class="pw-input" id="pwInput" type="password" placeholder="••••••••••••••"
+        onkeydown="if(event.key==='Enter')checkPassword()">
+      <button class="pw-toggle" onclick="togglePwVisibility()" id="pwToggle">👁</button>
+    </div>
+    <div class="pw-error" id="pwError"></div>
+    <button class="pw-btn" onclick="checkPassword()">Unlock Admin</button>
+    <br>
+    <button class="pw-cancel" onclick="closePasswordOverlay()">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
